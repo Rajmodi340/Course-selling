@@ -102,3 +102,20 @@ const course=await Course.findById(id)
         res.status(500).json({message:"Server error"})
     }
  }
+ export const buycourses=async(req,res)=>{
+    const {userId}=req;
+    // here we take course id
+    const {id}=req.params
+    try{
+const course=await Course.findById(id)
+if(!course){
+    return res.status(400).json({error:"Course not found"})
+}
+const existingPurchase=await Purchase.findOne({userId,id})
+
+    }
+    catch(error){
+        res.status(500).json({message:"error in course buying"})
+console.log("error in course buying",error)
+    }
+ }
