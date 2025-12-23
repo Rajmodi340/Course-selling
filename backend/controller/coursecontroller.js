@@ -79,3 +79,26 @@ res.json({message:"Course deleted successfully"})
         res.status(500).json({message:"Server error"})
     }
  }
+ export const getcourses=async(req,res)=>{
+    try{
+        const courses=await Course.find({})
+        res.json({message:"Courses fetched successfully",courses})
+    }
+    catch(error){
+        res.status(500).json({message:"Server error"})
+    }
+ }
+ export const getcourseDEtails=async(req,res)=>{
+    const {id}=req.params
+    try{
+const course=await Course.findById(id)
+        res.json({message:"Course details fetched successfully",course})
+    
+    if(!course){
+        return res.status(404).json({message:"Course not found"})
+    }
+}
+    catch(error){
+        res.status(500).json({message:"Server error"})
+    }
+ }

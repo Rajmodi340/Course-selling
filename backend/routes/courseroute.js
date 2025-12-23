@@ -3,7 +3,11 @@ const router=express.Router()
 import { createcourse } from "../controller/coursecontroller.js"
 import { updatecourse } from "../controller/coursecontroller.js"
 import { deletecourse } from "../controller/coursecontroller.js"
+import { getcourses } from "../controller/coursecontroller.js"
+import { getcourseDEtails } from "../controller/coursecontroller.js"
 router.post("/createcourse",createcourse)
 router.put("/updatecourse/:id",updatecourse)
 router.delete("/deletecourse/:id",deletecourse)
+router.get("/getcourses",getcourses)
+router.get("/:id",getcourseDEtails)
 export default router
