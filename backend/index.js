@@ -6,6 +6,7 @@ import dotenv from "dotenv"
 import courseRoute from "./routes/courseroute.js"
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
+import userrouter from "./routes/userroute.js";
 app.use(express.json())
 app.use(cookieParser())
 app.use(
@@ -16,7 +17,7 @@ app.use(
 )
 dotenv.config()
 app.use("/api/v1/course",courseRoute)
-
+app.use("/api/v1/user",userrouter)
 
 try{
 mongoose.connect(process.env.MONGO_URL)
