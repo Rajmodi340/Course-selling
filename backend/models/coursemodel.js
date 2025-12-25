@@ -20,7 +20,11 @@ const userschema=new mongoose.Schema({
     url:{
         type:String,
         required:true,
-    }
+    },
+},
+createrId:{
+    type:mongoose.Types.ObjectId,
+    ref:"User"
 }
 })
 const Course=mongoose.model("Course",userschema)

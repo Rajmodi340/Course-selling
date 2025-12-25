@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 import config from "../config.js";
-function usermiddleware(req,res,next){
+function adminmiddleware(req,res,next){
     const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -8,8 +8,8 @@ function usermiddleware(req,res,next){
   }
   const token = authHeader.split(" ")[1];
     try{
-const decoded=jwt.verify(token,config.JWT_SECRET)
-req.userId=decoded.id
+const decoded=jwt.verify(token,config.JWT_ADMIN_PASSWORD)
+req.adminId=decoded.id
 next()
     }
     catch(error){
@@ -18,4 +18,4 @@ next()
         console.log("invalid token or expire token"+error)
     }
 }
-export default usermiddleware
+export default adminmiddleware

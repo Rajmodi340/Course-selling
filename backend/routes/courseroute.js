@@ -7,10 +7,11 @@ import { getcourses } from "../controller/coursecontroller.js"
 import { getcourseDEtails } from "../controller/coursecontroller.js"
 import { buycourses } from "../controller/coursecontroller.js"
 import usermiddleware from "../middleware/middleware.js"
-router.post("/createcourse",createcourse)
-router.put("/updatecourse/:id",updatecourse)
-router.delete("/deletecourse/:id",deletecourse)
+import adminmiddleware from "../middleware/adminmiddleware.js"
+router.post("/createcourse",adminmiddleware,createcourse)
+router.put("/updatecourse/:id",adminmiddleware,updatecourse)
+router.delete("/deletecourse/:id",adminmiddleware,deletecourse)
 router.get("/getcourses",getcourses)
 router.get("/:id",getcourseDEtails)
-router.post("/buy/:id",buycourses,usermiddleware)
+router.post("/buy/:courseId",usermiddleware,buycourses)
 export default router

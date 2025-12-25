@@ -1,7 +1,8 @@
 import Course from "../models/coursemodel.js"
-// import Course from "../models/coursemodel.js"
+import { Purchase } from "../models/purchasemodel.js"
 import {v2 as cloudinary} from "cloudinary"
  export const createcourse=async(req,res)=>{
+    const adminId=req.adminId
     try{
         const {title,description,price}=req.body || {}
         if(!title || !description || !price ){
@@ -30,7 +31,8 @@ const courseData={
     image:{
         public_id:cloud.public_id,
         url:cloud.url
-    }
+    },
+    creatorId:adminId
 }
   const course=await Course.create(courseData)
   res.json({message:"Course created successfully",course})
@@ -42,11 +44,17 @@ const courseData={
 }
  }
  export const updatecourse=async(req,res)=>{
+    const adminId=req.adminId
     const {id}=req.params
     const {title,description,price,image}=req.body || {}
     try{
+        const courseSearch=await Course.findById(id)
+        if(!courseSearch){
+            return res.status(400).json({errors:"courses not found"})
+        }
         const updatedCourse=await Course.updateOne({
-            _id:id
+            _id:id,
+           createrId:adminId,
         },{
             title,
             description,
@@ -64,10 +72,12 @@ const courseData={
     }
  }
  export const deletecourse=async(req,res)=>{
+    const adminId=req.adminId
     const {id}=req.params
     try{
 const deletecourse=await Course.deleteOne({
-    _id:id
+    _id:id,
+    createrId:adminId,
 
 })
 if(!deletecourse){
@@ -105,14 +115,19 @@ const course=await Course.findById(id)
  export const buycourses=async(req,res)=>{
     const {userId}=req;
     // here we take course id
-    const {id}=req.params
+    const {courseId}=req.params
     try{
-const course=await Course.findById(id)
+const course=await Course.findById(courseId)
 if(!course){
     return res.status(400).json({error:"Course not found"})
 }
-const existingPurchase=await Purchase.findOne({userId,id})
-
+const existingPurchase=await Purchase.findOne({userId,courseId})
+if(existingPurchase){
+    return res.status(400).json({error:"user has alreay purchase course"})
+}
+const newpurchase=new Purchase({userId,courseId})
+await newpurchase.save()
+res.status(201).json({message:"Course purchased succesfully",newpurchase})
     }
     catch(error){
         res.status(500).json({message:"error in course buying"})
