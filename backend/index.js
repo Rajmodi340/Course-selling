@@ -3,11 +3,18 @@ import mongoose from "mongoose";
 import {v2 as cloudinary} from "cloudinary"
 const app=express()
 import dotenv from "dotenv"
+dotenv.config()
 import courseRoute from "./routes/courseroute.js"
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
 import userrouter from "./routes/userroute.js";
 import adminrouter from "./routes/adminroute.js";
+import orderrouter from "./routes/orderroute.js";
+import cors from "cors"
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true
+}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(
@@ -16,10 +23,10 @@ app.use(
         tempFileDir:"/tmp/"
     })
 )
-dotenv.config()
 app.use("/api/v1/course",courseRoute)
 app.use("/api/v1/user",userrouter)
 app.use("/api/v1/admin",adminrouter)
+app.use("/api/v1/order",orderrouter)
 
 try{
 mongoose.connect(process.env.MONGO_URL)

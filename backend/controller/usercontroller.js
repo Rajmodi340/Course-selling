@@ -44,7 +44,7 @@ const cookieoption={
     expires:new Date(Date.now()+24*60*60*1000),
     httpOnly:true,
     secure:process.env.NODE_ENV==="production",
-    sameSite:"Strict"
+    sameSite:"Lax"
 }
     res.cookie("jwt",token,cookieoption)
 res.status(201).json({message:"user login successfully",user,token})
@@ -57,13 +57,16 @@ res.status(201).json({message:"user login successfully",user,token})
 }
 export const Logout = async (req, res) => {
   try {
-     if(!req.cookies.jwt){
-            return res.status(401).json({errors:"kindly login first"})
-        }
+    // Check if user has a JWT cookie or Authorization header token
+    const hasCookie = req.cookies.jwt;
+    const authHeader = req.headers.authorization;
+    const hasToken = authHeader && authHeader.startsWith("Bearer ");
+
+    // Allow logout even if cookie is missing, since client already cleared localStorage
     res.clearCookie("jwt", {
       httpOnly: true,
-      secure: true,      // true in production (HTTPS)
-      sameSite: "strict"
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Lax"
     });
 
     res.status(200).json({ message: "User logged out successfully" });

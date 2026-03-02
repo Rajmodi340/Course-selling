@@ -11,7 +11,7 @@ import adminmiddleware from "../middleware/adminmiddleware.js"
 router.post("/createcourse",adminmiddleware,createcourse)
 router.put("/updatecourse/:id",adminmiddleware,updatecourse)
 router.delete("/deletecourse/:id",adminmiddleware,deletecourse)
-router.get("/getcourses",getcourses)
+router.get("/",getcourses)
 router.get("/:id",getcourseDEtails)
 router.post("/buy/:courseId",usermiddleware,buycourses)
 export default router
